@@ -1,0 +1,21 @@
+---
+- hosts: "{{ hosts_prompt }}"
+  gather_facts: false
+  
+  vars_prompt:
+   - name: "hosts_prompt"
+     prompt: "Enter the Host or Host Group to run this Playbook"
+     private: no
+
+   - name: "user_name"
+     prompt: "Please enter the username" 
+     private: no
+ 
+  tasks:
+   
+  - name: Changing password for "{{ user_name }}"
+    user:
+      name: "{{ user_name }}"
+      update_password: always
+      password: "{{ newpassword|password_hash('sha512') }}"  
+    
