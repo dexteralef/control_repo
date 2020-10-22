@@ -1,0 +1,151 @@
+---
+#Created to automate the encryption process
+- hosts: "{{ hosts_prompt }}"
+
+  vars:
+      mkfs: mkfs.xfs
+
+  vars_prompt:
+  
+   - name: "hosts_prompt" ## Host where playbook about to play
+     prompt: "Enter the Host or Host group need to run with this Playbook"
+     private: no
+   
+   - name: pvdevice
+     prompt: "Pls enter the physical device: eg(/dev/sda1,/dev/sda2)"
+     private: no
+ 
+   - name: encname
+     prompt: "Pls enter new LV Name? "
+     private: no
+
+   - name: dev
+     prompt: "Enter the Device to encrypt? "
+     private: no
+ 
+   - name: pass
+     prompt: "Pls. enter your Passphrase? "
+     private: yes
+  
+   - name: vgname
+     prompt: "Please enter the volume group name:"
+     private: no
+
+  tasks:
+  - name: partition new disk
+    shell: /bin/echo -e "\nn\np\n3\n\n\nt\n\n8e\nw" | fdisk /dev/sda
+    failed_when: false
+    register: partdisk 
+
+  - debug: msg="{{ partdisk.stdout }}"
+  - debug: msg="{{ partdisk.stderr }}"
+  - debug: msg="{{ partdisk.stderr_lines }}"
+  - debug: msg="{{ partdisk.stdout_lines }}"
+
+  - name: Execute partprobe to reflect fdisk task...
+    shell: /usr/sbin/partprobe /dev/sda
+ 
+  - name: Install CRYPTSETUP
+    yum:
+      name: cryptsetup
+      state: present
+ 
+  - name: Create physical volume {{pvdevice}}
+    shell: pvcreate {{pvdevice}}
+
+  - name: Extend centos volume group
+    shell: vgextend {{vgname}} {{pvdevice}}
+
+  - name: Create new logical volume {{encname}} 
+    shell: lvcreate -l +100 -n {{encname}} {{vgname}}
+
+#  - name: Start Shredding process...
+#    shell: /usr/bin/shred -n 0 -z -v /dev/{{vgname}}/{{encname}} 
+#    register: shredder
+
+#  - debug: msg="{{ shredder.stdout }}"  
+#  - debug: msg="{{ shredder.stderr }}"  
+  - name: Copy shred.sh to the remote hosts.
+    copy:
+       src: /root/ansible/itops/files/shred.sh
+       dest: /tmp/
+  - name: Changing perm of "/tmp/shred.sh", adding "+x"
+    file: dest=/tmp/shred.sh mode=a+x
+  
+  - name: Execute the command in remote shell; stdout goes to the specified file on the remote
+    shell: /tmp/shred.sh >> /tmp/shredout.log
+
+
+  - name: create temp file
+    command: mktemp /tmp/encdisk.XXXXXXX
+    register: tmp
+
+  - name: write password to temp file
+    template: src=templates/encrypt-pass.j2 dest={{tmp.stdout}}
+
+  - name: encrypt disk
+    shell: cat {{tmp.stdout}} | cryptsetup --verbose --batch-mode luksFormat {{dev}}
+
+  - name: open encrypted disk
+    shell: cat {{tmp.stdout}} | cryptsetup luksOpen {{dev}} {{encname}}
+
+  - name: Execute luksDump...
+    shell: cryptsetup /dev/{{vgname}}/{{encname}}
+    register: keydumps
+    failed_when: false
+    
+  - debug: msg="{{ keydumps.stdout }}"
+  - debug: msg="{{ keydumps.stderr }}"
+  - debug: msg="{{ keydumps.stdout_lines }}"
+  - debug: msg="{{ keydumps.stderr_lines }}"
+
+  - name: Save the encryption key...
+    shell: echo {{ pass }} > /root/.lukskey
+
+  - name: Add the encryption key to persist on reboot...
+    shell: cryptsetup luksAddKey /dev/{{vgname}}/{{encname}} /root/.lukskey
+
+  - name: Add the key to /etc/crypttab
+    shell: echo "cx01enc-01  /dev/{{vgname}}/{{encname}}  /root/.lukskey" >> /etc/crypttab
+
+  - name: Start the zeroing process...
+    shell: dd if=/dev/zero of=/dev/mapper/{{encname}} status=progress bs=1K 
+    register: zeroing
+    failed_when: false
+    no_log: True  
+
+  - debug: msg="{{ zeroing.stdout }}"
+  - debug: msg="{{ zeroing.stderr }}"
+  - debug: msg="{{ zeroing.stdout_lines }}"
+  - debug: msg="{{ zeroing.stderr_lines }}"
+
+  - name: mkfs on {{dev}}
+    command: '{{mkfs}} -L {{encname}} /dev/mapper/{{encname}}'
+
+  - name: Create the /data mount point
+    shell: mkdir -p /data
+
+  - name: Generate /etc/fstab entry
+    shell: echo "/dev/mapper/cx01enc-01 /data  xfs   defaults,nofail 1 2" >> /etc/fstab
+  
+  - name: Mount /data
+    mount: 
+      path: /data
+      src: /dev/mapper/{{encname}}
+      state: present
+      fstype: xfs
+     
+  - name: purge temp file
+    command: shred -z -u {{tmp.stdout}}
+
+  - name: Restarting the servers...
+    shell: "sleep 5 && reboot"
+    async: 1
+    poll: 0
+ 
+  - name: Wait for the reboot to complete...
+    wait_for_connection:
+      connect_timeout: 30
+      sleep: 5
+      delay: 5
+      timeout: 300
