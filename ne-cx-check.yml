@@ -1,0 +1,73 @@
+---
+- hosts: "{{ hosts_prompt }}"
+
+  vars_prompt:
+   - name: "hosts_prompt" ## Host where playbook about to play
+     prompt: "Enter the Host or Host group need to run with this Playbook"
+     private: no
+
+  tasks:
+
+  - name: Check if alefadmin user is created...
+    shell: cat /etc/passwd | grep -i alefadmin
+    failed_when: false
+    register: aladmchk
+
+  - debug: msg="{{ aladmchk.stdout }}"
+#  - debug: msg="{{ aladmchk.stderr }}"
+  
+  - name: Check if devops user is created...
+    shell: cat /etc/passwd | grep -i devops
+    failed_when: false
+    register: devchk
+
+  - debug: msg="{{ devchk.stdout }}"
+#  - debug: msg="{{ devchk.stderr }}"
+  
+  - name: Check if labadmin user is deleted...
+    shell: cat /etc/passwd | grep -i labadmin
+    failed_when: false 
+    register: labchk
+
+  - debug: msg="{{ labchk.stdout }}"
+#  - debug: msg="{{ labchk.stderr }}"
+  
+  - name: Check if NTP is installed...
+    shell: rpm -qa | grep ntp
+    register: ntpchk
+
+  - debug: msg="{{ ntpchk.stdout }}"
+#  - debug: msg="{{ ntpchk.stderr }}"
+  
+  - name: Check if NTPD is running...
+    shell: systemctl status ntpd
+    register: ntpdchk
+
+  - debug: msg="{{ ntpdchk.stdout }}"
+#  - debug: msg="{{ ntpchk.stderr }}"
+  
+  - name: Check if aide is installed...
+    shell: rpm -qa | grep -i aide
+    register: aidechk
+
+  - debug: msg="{{ aidechk.stdout }}"
+#  - debug: msg="{{ ntpchk.stderr }}"
+ 
+  - name: Check if /etc/motd is updated...
+    shell: cat /etc/motd
+    register: motdchk
+
+  - debug: msg="{{ motdchk.stdout }}"
+
+  - name: Check if /etc/issue is updated...
+    shell: cat /etc/issue
+    register: isschk
+
+  - debug: msg="{{ isschk.stdout }}"
+
+  - name: Check if /etc/issue.net is updated
+    shell: cat /etc/issue.net
+    register: issnetchk
+
+  - debug: msg="{{ issnetchk.stdout }}"
+
