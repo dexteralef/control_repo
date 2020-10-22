@@ -1,0 +1,32 @@
+---
+- hosts: "{{ hosts_prompt }}"
+
+  vars_prompt:
+   - name: "hosts_prompt" ## Host where playbook about to play
+     prompt: "Enter the Host or Host group need to run with this Playbook"
+     private: no
+
+  tasks:
+
+  - name: Partition cx01enc-01
+    shell: mkfs.xfs -f /dev/mapper/cx01enc-01
+  - name: Create /data directory
+    shell: mkdir -p /data
+
+  - name: Mount /data
+    shell: mount /dev/mapper/cx01enc-01 /data
+
+  - name: Create /etc/fstab
+    shell: echo "/dev/mapper/cx01enc-01      /data      xfs   defaults,nofail 1 2" >> /etc/fstab
+
+  - name: Restarting the servers...
+    shell: "sleep 5 && reboot"
+    async: 1
+    poll: 0
+ 
+  - name: Wait for the reboot to complete...
+    wait_for_connection:
+      connect_timeout: 20
+      sleep: 5
+      delay: 5
+      timeout: 300
