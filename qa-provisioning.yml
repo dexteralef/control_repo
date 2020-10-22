@@ -1,0 +1,204 @@
+---
+#This is the final version of qa-provisioning script NE Project October 22 2020.
+#Developed by Dexter and Zak :) to automate the process of provisioning.
+- hosts: "{{ hosts_prompt }}"
+  gather_facts: no
+  
+  vars_prompt:
+   - name: "hosts_prompt" ## Host where playbook about to play
+     prompt: "Enter the Host or Host group need to run with this Playbook"
+     private: no
+
+   - name: "disk_name"
+     prompt: "Disk used for creating partition. eg(/dev/vda,/dev/vdb)"
+     private: no
+
+  tasks: 
+  - name: partition new disk
+    shell: /bin/echo -e "\nn\np\n3\n\n\nt\n\n8e\nw" | fdisk {{ disk_name }}
+    failed_when: false
+    register: partchk
+
+  - debug: msg="{{ partchk.stdout }}"
+
+  - name: Execute partprobe to reflect fdisk task...
+    shell: /usr/sbin/partprobe /dev/vda
+    register: partchk2
+
+  - debug: msg="{{ partchk2.stdout }}"
+
+  - name: Disable firewalld...
+    shell: systemctl disable firewalld
+
+  - name: Ensure hostaname is set
+    hostname: name={{ inventory_hostname }}
+    when: not inventory_hostname|trim is match('(\d{1,3}\.){3}\d{1,3}')
+ 
+  - name: update packages to the latest versions
+    yum:
+      name: '*'
+      state: latest
+
+  - name: Install wget
+    yum:
+      name: wget
+      state: present
+
+  - name: Install bind-utils
+    yum:
+      name: bind-utils
+      state: present
+
+  - name: Install tcpdump
+    yum:
+      name: tcpdump
+      state: present
+
+  - name: Install net-tools
+    yum:
+      name: net-tools
+      state: present
+
+  - name: Install NTP
+    yum:
+      name: ntp
+      state: present
+
+  - name: Enable NTPD
+    systemd:
+      name: ntpd
+      enabled: yes
+
+  - name: Start NTPD
+    systemd:
+      name: ntpd
+      state: started
+
+  - name: Create physical volume /dev/vda3
+    shell: pvcreate /dev/vda3
+
+  - name: Extend centos volume group
+    shell: vgextend centos /dev/vda3
+
+  - name: Extend logicl volume /dev/centos/root
+    shell: lvextend -l +7679 /dev/centos/root
+
+  - name: Grow the /dev/centos/root
+    shell: xfs_growfs /dev/centos/root
+  
+  - name: Add user qa to the system
+    user:
+      name: qa1
+      state: present
+      group: wheel
+
+  - name: Add user alefadmin
+    user:
+      name: alefadmin
+      state: present
+      group: wheel
+
+  - name: Add devops user
+    user:
+      name: devops
+      state: present
+      group: wheel
+
+  - name: Remove labadmin user...
+    user:
+       name: labadmin
+       state: absent
+
+  - name: Install AIDE binary...
+    yum:
+      name: aide
+      state: present
+
+  - name: Initialize the AIDE database...  
+    shell: aide --init
+
+  - name: Create the AIDE database...
+    shell: cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+
+  - name: Create job for AIDE to check every five hours...
+    cron:
+      name: "run aide --check"
+      minute: "0"
+      hour: "5"
+      job: "/usr/sbin/aide --check"
+
+  - name: Remove /etc/motd on the remote hosts
+    file:
+      path: /etc/motd
+      state: absent
+
+  - name: Remove /etc/issue on the remote hosts
+    file:
+      path: /etc/issue
+      state: absent
+
+  - name: Remove /etc/issue.net on the remote hosts
+    file:
+      path: /etc/issue.net
+      state: absent
+    
+  - name: Copy motd to the remote hosts.
+    copy:
+       src: /root/ansible/itops/files/motd
+       dest: /etc/
+    
+  - name: Copy issue to the remote hosts.
+    copy:
+       src: /root/ansible/itops/files/issue
+       dest: /etc/
+    
+  - name: Copy issue.net to the remote hosts.
+    copy:
+       src: /root/ansible/itops/files/issue.net
+       dest: /etc/
+
+  - name: Enable versa console access part 1
+    shell: systemctl enable serial-getty@ttyS0.service
+
+  - name: enable versa console access part 2 
+    shell: systemctl start serial-getty@ttyS0.service
+
+  - name: Install GNOME Desktop
+    shell: yum -y groups install "GNOME Desktop"
+
+  - name: Set default target...
+    shell: systemctl set-default graphical.target
+
+  - name: echo xinitrc
+    shell: echo "exec gnome-session" >> ~/.xinitrc
+
+  - name: Download google chrome binary
+    shell: wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
+  - name: Install google chrome binary
+    shell: yum -y localinstall google-chrome-stable_current_x86_64.rpm
+
+  - name: Install EPEL repository
+    shell: rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+  - name: Install XRDP
+    shell: yum -y install xrdp
+
+  - name: Enable XRDP
+    shell: systemctl enable xrdp
+
+  - name: Enable X at startup
+    shell: echo "exec gnome-session" >> ~/.xinitrc
+
+  - name: Restarting the servers...
+    shell: "sleep 5 && reboot"
+    async: 1
+    poll: 0
+ 
+  - name: Wait for the reboot to complete...
+    wait_for_connection:
+      connect_timeout: 20
+      sleep: 5
+      delay: 5
+      timeout: 300
+
