@@ -1,0 +1,218 @@
+[necxbatch1]
+6033-cx01.alefed.com ansible_ssh_host=10.160.185.225
+4041-cx01.alefed.com ansible_ssh_host=10.134.89.225
+4079-cx01.alefed.com ansible_ssh_host=10.129.25.225
+4031-cx01.alefed.com ansible_ssh_host=10.202.121.225
+4043-cx01.alefed.com ansible_ssh_host=10.134.121.225
+4044-cx01.alefed.com ansible_ssh_host=10.134.153.225
+8054-cx01.alefed.com ansible_ssh_host=10.178.25.225
+9033-cx01.alefed.com ansible_ssh_host=10.187.185.225
+9031-cx01.alefed.com ansible_ssh_host=10.185.249.225
+9054-cx01.alefed.com ansible_ssh_host=10.187.121.225
+9093-cx01.alefed.com ansible_ssh_host=10.185.89.225
+5053-cx01.alefed.com ansible_ssh_host=10.144.25.225
+5065-cx01.alefed.com ansible_ssh_host=10.153.25.225
+5064-cx01.alefed.com ansible_ssh_host=10.144.217.225
+5510-cx01.alefed.com ansible_ssh_host=10.153.89.225
+590-cx01.alefed.com ansible_ssh_host=10.158.45.225
+7012-cx01.alefed.com ansible_ssh_host=10.168.121.225
+7022-cx01.alefed.com ansible_ssh_host=10.168.25.225
+
+[neqabatch1]
+6033-qa01.alefed.com ansible_ssh_host=10.160.185.226
+4041-qa01.alefed.com ansible_ssh_host=10.134.89.226
+4079-qa01.alefed.com ansible_ssh_host=10.129.25.226
+4031-qa01.alefed.com ansible_ssh_host=10.202.121.226
+4043-qa01.alefed.com ansible_ssh_host=10.134.121.226
+4044-qa01.alefed.com ansible_ssh_host=10.134.153.226
+8054-qa01.alefed.com ansible_ssh_host=10.178.25.226
+9033-qa01.alefed.com ansible_ssh_host=10.187.185.226
+9031-qa01.alefed.com ansible_ssh_host=10.185.249.226
+9054-qa01.alefed.com ansible_ssh_host=10.187.121.226
+9093-qa01.alefed.com ansible_ssh_host=10.185.89.226
+5053-qa01.alefed.com ansible_ssh_host=10.144.25.226
+5065-qa01.alefed.com ansible_ssh_host=10.153.25.226
+5064-qa01.alefed.com ansible_ssh_host=10.144.217.226
+5510-qa01.alefed.com ansible_ssh_host=10.153.89.226
+590-qa01.alefed.com ansible_ssh_host=10.158.45.226
+7012-qa01.alefed.com ansible_ssh_host=10.168.121.226
+7022-qa01.alefed.com ansible_ssh_host=10.168.25.226
+
+
+[necxbatch2]
+4014-cx01.alefed.com ansible_ssh_host=10.133.25.225
+4022-cx01.alefed.com ansible_ssh_host=10.133.153.225
+4034-cx01.alefed.com ansible_ssh_host=10.129.249.225
+4035-cx01.alefed.com ansible_ssh_host=10.130.25.225
+4037-cx01.alefed.com ansible_ssh_host=10.130.57.225
+4038-cx01.alefed.com ansible_ssh_host=10.130.89.225
+4045-cx01.alefed.com ansible_ssh_host=10.134.185.225
+4046-cx01.alefed.com ansible_ssh_host=10.130.185.225
+4049-cx01.alefed.com ansible_ssh_host=10.130.249.225
+4059-cx01.alefed.com ansible_ssh_host=10.135.153.225
+4063-cx01.alefed.com ansible_ssh_host=10.128.89.225
+4073-cx01.alefed.com ansible_ssh_host=10.128.185.225
+4074-cx01.alefed.com ansible_ssh_host=10.128.217.225
+4081-cx01.alefed.com ansible_ssh_host=10.131.89.225
+4082-cx01.alefed.com ansible_ssh_host=10.136.153.225
+4083-cx01.alefed.com ansible_ssh_host=10.136.185.225
+4084-cx01.alefed.com ansible_ssh_host=10.136.217.225
+4087-cx01.alefed.com ansible_ssh_host=10.136.249.225
+4088-cx01.alefed.com ansible_ssh_host=10.129.57.225
+4089-cx01.alefed.com ansible_ssh_host=10.137.25.225
+4092-cx01.alefed.com ansible_ssh_host=10.129.121.225
+4093-cx01.alefed.com ansible_ssh_host=10.129.153.225
+4095-cx01.alefed.com ansible_ssh_host=10.137.121.225
+4096-cx01.alefed.com ansible_ssh_host=10.131.25.225
+4199-cx01.alefed.com ansible_ssh_host=10.201.108.225
+5022-cx01.alefed.com ansible_ssh_host=10.146.57.225
+5025-cx01.alefed.com ansible_ssh_host=10.146.89.225
+5027-cx01.alefed.com ansible_ssh_host=10.146.153.225
+5028-cx01.alefed.com ansible_ssh_host=10.146.185.225
+5029-cx01.alefed.com ansible_ssh_host=10.146.217.225
+5059-cx01.alefed.com ansible_ssh_host=10.144.89.225
+5061-cx01.alefed.com ansible_ssh_host=10.150.249.225
+5069-cx01.alefed.com ansible_ssh_host=10.153.121.225
+5067-cx01.alefed.com ansible_ssh_host=10.148.185.225
+5055-cx01.alefed.com ansible_ssh_host=10.152.185.225
+5087-cx01.alefed.com ansible_ssh_host=10.148.217.225
+5083-cx01.alefed.com ansible_ssh_host=10.147.185.225
+5031-cx01.alefed.com ansible_ssh_host=10.151.89.225
+5032-cx01.alefed.com ansible_ssh_host=10.146.249.225
+5070-cx01.alefed.com ansible_ssh_host=10.153.153.225
+
+[neqabatch2]
+4014-qa01.alefed.com ansible_ssh_host=10.133.25.226
+4022-qa01.alefed.com ansible_ssh_host=10.133.153.226
+4034-qa01.alefed.com ansible_ssh_host=10.129.249.226
+4035-qa01.alefed.com ansible_ssh_host=10.130.25.226
+4037-qa01.alefed.com ansible_ssh_host=10.130.57.226
+4038-qa01.alefed.com ansible_ssh_host=10.130.89.226
+4045-qa01.alefed.com ansible_ssh_host=10.134.185.226
+4046-qa01.alefed.com ansible_ssh_host=10.130.185.226
+4049-qa01.alefed.com ansible_ssh_host=10.130.249.226
+4059-qa01.alefed.com ansible_ssh_host=10.135.153.226
+4063-qa01.alefed.com ansible_ssh_host=10.128.89.226
+4073-qa01.alefed.com ansible_ssh_host=10.128.185.226
+4074-qa01.alefed.com ansible_ssh_host=10.128.217.226
+4081-qa01.alefed.com ansible_ssh_host=10.131.89.226
+4082-qa01.alefed.com ansible_ssh_host=10.136.153.226
+4083-qa01.alefed.com ansible_ssh_host=10.136.185.226
+4084-qa01.alefed.com ansible_ssh_host=10.136.217.226
+4087-qa01.alefed.com ansible_ssh_host=10.136.249.226
+4088-qa01.alefed.com ansible_ssh_host=10.129.57.226
+4089-qa01.alefed.com ansible_ssh_host=10.137.25.226
+4092-qa01.alefed.com ansible_ssh_host=10.129.121.226
+4093-qa01.alefed.com ansible_ssh_host=10.129.153.226
+4095-qa01.alefed.com ansible_ssh_host=10.137.121.226
+4096-qa01.alefed.com ansible_ssh_host=10.131.25.226
+4199-qa01.alefed.com ansible_ssh_host=10.201.108.226
+5022-qa01.alefed.com ansible_ssh_host=10.146.57.226
+5025-qa01.alefed.com ansible_ssh_host=10.146.89.226
+5027-qa01.alefed.com ansible_ssh_host=10.146.153.226
+5028-qa01.alefed.com ansible_ssh_host=10.146.185.226
+5029-qa01.alefed.com ansible_ssh_host=10.146.217.226
+5059-qa01.alefed.com ansible_ssh_host=10.144.89.226
+5061-qa01.alefed.com ansible_ssh_host=10.150.249.226
+5069-qa01.alefed.com ansible_ssh_host=10.153.121.226
+5067-qa01.alefed.com ansible_ssh_host=10.148.185.226
+5055-qa01.alefed.com ansible_ssh_host=10.152.185.226
+5087-qa01.alefed.com ansible_ssh_host=10.148.217.226
+5083-qa01.alefed.com ansible_ssh_host=10.147.185.226
+5031-qa01.alefed.com ansible_ssh_host=10.151.89.226
+5032-qa01.alefed.com ansible_ssh_host=10.146.249.226
+5070-qa01.alefed.com ansible_ssh_host=10.153.153.226[necxbatch6]
+5042-cx01.alefed.com ansible_ssh_host=10.147.153.225
+5074-cx01.alefed.com ansible_ssh_host=10.145.25.225
+5037-cx01.alefed.com ansible_ssh_host=10.147.25.225
+5077-cx01.alefed.com ansible_ssh_host=10.145.121.225
+5033-cx01.alefed.com ansible_ssh_host=10.151.185.225
+5056-cx01.alefed.com ansible_ssh_host=10.144.57.225
+5075-cx01.alefed.com ansible_ssh_host=10.145.57.225
+5040-cx01.alefed.com ansible_ssh_host=10.148.89.225
+5038-cx01.alefed.com ansible_ssh_host=10.147.57.225
+6022-cx01.alefed.com ansible_ssh_host=10.161.89.225
+
+[neqabatch6]
+5042-qa01.alefed.com ansible_ssh_host=10.147.153.226
+5074-qa01.alefed.com ansible_ssh_host=10.145.25.226
+5037-qa01.alefed.com ansible_ssh_host=10.147.25.226
+5077-qa01.alefed.com ansible_ssh_host=10.145.121.226
+5033-qa01.alefed.com ansible_ssh_host=10.151.185.226
+5056-qa01.alefed.com ansible_ssh_host=10.144.57.226
+5075-qa01.alefed.com ansible_ssh_host=10.145.57.226
+5040-qa01.alefed.com ansible_ssh_host=10.148.89.226
+5038-qa01.alefed.com ansible_ssh_host=10.147.57.226
+6022-qa01.alefed.com ansible_ssh_host=10.161.89.226
+
+
+[test]
+testvm1.example.com ansible_ssh_host=10.223.15.131
+testvm2.example.com ansible_ssh_host=10.223.15.132
+
+[QA5029]
+5029-qa01.alefed.com ansible_ssh_host=10.146.217.226
+
+[necxbatch4]
+5031-cx01.alefed.com ansible_ssh_host=10.151.89.225
+5032-cx01.alefed.com ansible_ssh_host=10.146.249.225
+5055-cx01.alefed.com ansible_ssh_host=10.152.185.225
+5059-cx01.alefed.com ansible_ssh_host=10.144.89.225
+5061-cx01.alefed.com ansible_ssh_host=10.150.249.225
+5067-cx01.alefed.com ansible_ssh_host=10.148.185.225
+5069-cx01.alefed.com ansible_ssh_host=10.153.121.225
+5083-cx01.alefed.com ansible_ssh_host=10.147.185.225
+5087-cx01.alefed.com ansible_ssh_host=10.148.217.225
+
+[neqabatch4]
+#5031-qa01.alefed.com ansible_ssh_host=10.151.89.226
+#5032-qa01.alefed.com ansible_ssh_host=10.146.249.226
+5055-qa01.alefed.com ansible_ssh_host=10.152.185.226
+5059-qa01.alefed.com ansible_ssh_host=10.144.89.226
+5061-qa01.alefed.com ansible_ssh_host=10.150.249.226
+5067-qa01.alefed.com ansible_ssh_host=10.148.185.226
+5069-qa01.alefed.com ansible_ssh_host=10.153.121.226
+5083-qa01.alefed.com ansible_ssh_host=10.147.185.226
+5087-qa01.alefed.com ansible_ssh_host=10.148.217.226
+
+[CX5070]
+5070-cx01.alefed.com ansible_ssh_host=10.153.153.225
+
+[QA5070]
+5070-qa01.alefed.com ansible_ssh_host=10.153.153.226
+
+[necxbatch5]
+5036-cx01.alefed.com ansible_ssh_host=10.151.249.225
+5081-cx01.alefed.com ansible_ssh_host=10.148.249.225
+6020-cx01.alefed.com ansible_ssh_host=10.138.57.225
+5076-cx01.alefed.com ansible_ssh_host=10.145.89.225
+6018-cx01.alefed.com ansible_ssh_host=10.161.57.225
+6017-cx01.alefed.com ansible_ssh_host=10.161.25.225
+6011-cx01.alefed.com ansible_ssh_host=10.162.121.225
+5041-cx01.alefed.com ansible_ssh_host=10.147.121.225
+5073-cx01.alefed.com ansible_ssh_host=10.144.249.225
+#5042-cx01.alefed.com ansible_ssh_host=10.147.153.225
+
+[neqabatch5]
+5036-qa01.alefed.com ansible_ssh_host=10.151.249.226
+5081-qa01.alefed.com ansible_ssh_host=10.148.249.226
+6020-qa01.alefed.com ansible_ssh_host=10.138.57.226
+5076-qa01.alefed.com ansible_ssh_host=10.145.89.226
+6018-qa01.alefed.com ansible_ssh_host=10.161.57.226
+6017-qa01.alefed.com ansible_ssh_host=10.161.25.226
+6011-qa01.alefed.com ansible_ssh_host=10.162.121.226
+5041-qa01.alefed.com ansible_ssh_host=10.147.121.226
+5073-qa01.alefed.com ansible_ssh_host=10.144.249.226
+#5042-qa01.alefed.com ansible_ssh_host=10.147.153.226
+
+[test]
+#5031-qa01.alefed.com ansible_ssh_host=10.151.89.226
+#5032-qa01.alefed.com ansible_ssh_host=10.146.249.226
+#5055-qa01.alefed.com ansible_ssh_host=10.152.185.226
+#5059-qa01.alefed.com ansible_ssh_host=10.144.89.226
+#5061-qa01.alefed.com ansible_ssh_host=10.150.249.226
+#5067-qa01.alefed.com ansible_ssh_host=10.148.185.226
+#5069-qa01.alefed.com ansible_ssh_host=10.153.121.226
+#5070-qa01.alefed.com ansible_ssh_host=10.153.153.226
+#5083-qa01.alefed.com ansible_ssh_host=10.147.185.226
+#5087-qa01.alefed.com ansible_ssh_host=10.148.217.226
