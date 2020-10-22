@@ -1,0 +1,212 @@
+---
+#This is the final version of cx-provisioning script NE Project October 22 2020.
+#Developed by Dexter and Zak :) to automate the process of provisioning.
+- hosts: "{{hosts_prompt}}"
+  gather_facts: no
+
+  vars_prompt:
+   - name: "hosts_prompt" ## Host where playbook about to play
+     prompt: "Enter the Host or Host group need to run with this Playbook"
+     private: no
+
+   - name: "disk_name"
+     prompt: "Disk used for creating partition. eg(/dev/vda,/dev/vdb)"
+     private: no
+
+  tasks:
+
+  - name: partition new disk
+    shell: /bin/echo -e "\nn\np\n3\n\n\nt\n\n8e\nw" | fdisk "{{ disk_name }}"
+    failed_when: false
+    register: partchk
+
+  - debug: msg="{{ partchk.stdout }}"
+ 
+  - name: Execute partprobe to reflect fdisk task...
+    shell: /usr/sbin/partprobe /dev/vda
+    register: prbchk
+
+  - debug: msg="{{ prbchk.stdout }}"
+
+  - name: Ensure hostaname is set
+    hostname: name={{ inventory_hostname }}
+    when: not inventory_hostname|trim is match('(\d{1,3}\.){3}\d{1,3}')
+  
+  - name: Create physical volume /dev/vda3
+    shell: pvcreate /dev/vda3
+
+  - name: Extend centos volume group
+    shell: vgextend centos /dev/vda3
+
+  - name: Resize root partition
+    shell: lvresize -L +42G /dev/centos/root
+
+  - name: Expand the /dev/centos/root
+    shell: xfs_growfs /dev/centos/root
+
+  - name: Create new logical volume cx01enc-01
+    shell: lvcreate -L +708G -n cx01enc-01 centos
+ 
+  - name: Update the system...
+    yum:
+      name: '*'
+      state: latest
+
+  - name: Install wget
+    yum:
+      name: wget
+      state: present
+
+  - name: Install Bind
+    yum:
+      name: bind
+      state: present
+
+  - name: Install CRYPTSETUP
+    yum:
+      name: cryptsetup
+      state: present
+ 
+  - name: Install bind-utils
+    yum:
+      name: bind-utils
+      state: present
+
+  - name: Install tcpdump
+    yum:
+      name: tcpdump
+      state: present
+
+  - name: Install net-tools
+    yum:
+      name: net-tools
+      state: present
+ 
+  - name: Install NTP
+    yum:
+      name: ntp
+      state: present
+
+  - name: Enable ntpd service on startup...
+    systemd:
+      name: ntpd
+      enabled: yes
+
+  - name: Start ntpd service...
+    systemd:
+      name: ntpd
+      state: started       
+
+  - name: Install AIDE binary...
+    yum:
+      name: aide
+      state: present
+
+  - name: Initialize the AIDE database...  
+    shell: aide --init
+
+  - name: Create the AIDE database...
+    shell: cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+
+  - name: Create job for AIDE to check every five hours...
+    cron:
+      name: "run aide --check"
+      minute: "0"
+      hour: "5"
+      job: "/usr/sbin/aide --check"
+
+  - name: Remove /etc/motd on the remote hosts
+    file:
+      path: /etc/motd
+      state: absent
+
+  - name: Remove /etc/issue on the remote hosts
+    file:
+      path: /etc/issue
+      state: absent
+
+  - name: Remove /etc/issue.net on the remote hosts
+    file:
+      path: /etc/issue.net
+      state: absent
+    
+  - name: Copy motd to the remote hosts.
+    copy:
+       src: /root/ansible/itops/files/motd
+       dest: /etc/
+    
+  - name: Copy issue to the remote hosts.
+    copy:
+       src: /root/ansible/itops/files/issue
+       dest: /etc/
+    
+  - name: Copy issue.net to the remote hosts.
+    copy:
+       src: /root/ansible/itops/files/issue.net
+       dest: /etc/
+
+  - name: Copy forward.alefed to the remote hosts.
+    copy:
+       src: /dns/forward.alefed
+       dest: /var/named/
+
+  - name: Copy reverse.alefed to the remote hosts.
+    copy:
+       src: /dns/reverse.alefed
+       dest: /var/named/
+
+  - name: Remove /etc/named.conf on the remote hosts
+    file:
+      path: /etc/named.conf
+      state: absent
+
+  - name: Copy named.conf to the remote hosts.
+    copy:
+       src: /dns/named.conf
+       dest: /etc/
+
+  - name: Copy ne_cx_encrypt.sh to remote hosts...
+    copy:
+       src: /root/ansible/itops/files/ne_cx_encrypt.sh
+       dest: /tmp/
+
+  - name: change the permission for ne_cx_encrypt.sh
+    shell: chmod +x /tmp/ne_cx_encrypt.sh
+
+  - name: chown forward.alefed
+    shell: chown root:named /var/named/forward.alefed
+
+  - name: chown reverse.alefed
+    shell: chown root:named /var/named/reverse.alefed
+
+  - name: chown named.conf
+    shell: chown root:named /etc/named.conf
+
+  - name: Add user alefadmin
+    user:
+      name: alefadmin
+      state: present
+      group: wheel
+
+  - name: Add devops user
+    user:
+      name: devops
+      state: present
+      group: wheel
+
+  - name: Remove labadmin user
+    user:
+      name: labadmin
+      state: absent
+  
+  - name: Restarting the servers...
+    shell: "sleep 5 && reboot"
+    async: 1
+    poll: 0
+ 
+  - name: Wait for the reboot to complete...
+    wait_for_connection:
+      connect_timeout: 20
+      sleep: 5
+      delay: 5
+      timeout: 300
